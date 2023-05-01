@@ -7,6 +7,13 @@ go mod tidy
 go run main.go
 ```
 
+# Structure
+```
+1. The Main TUI App is TabbedPanels Layout and the library used is https://code.rocketnine.space/tslocum/cview
+2. Code for each Tab is placed under detect directory
+3. Code for each Tab's UI is placed under ui directory
+```
+
 # ToDo List:
 
 Work to be done are listed below:
