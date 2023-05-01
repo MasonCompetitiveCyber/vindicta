@@ -1,6 +1,12 @@
 # Vindicta
 CCDC Blue Team Tool For Linux
 
+# Run
+`
+go mod tidy
+go run main.go
+`
+
 # ToDo List:
 
 Work to be done are listed below:
