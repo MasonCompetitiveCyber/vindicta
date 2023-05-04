@@ -1,6 +1,8 @@
 # Vindicta
 CCDC Blue Team Tool For Linux
 
+# <b>Check tui branch for development and contribution.</b>
+
 # Run
 ```
 Install packages with the command below:
