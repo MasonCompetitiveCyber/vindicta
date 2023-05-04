@@ -1,49 +1,64 @@
 package main
 
 import (
-	"code.rocketnine.space/tslocum/cview"
+	"time"
+
+	"fyne.io/fyne/v2/app"
+	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/widget"
 	"github.com/MasonCompetitiveCyber/vindicta/ui"
-	"github.com/gdamore/tcell/v2"
 )
 
 func main() {
-	// Define the Application
-	app := cview.NewApplication()
 
-	// Enable Using Mouse
-	app.EnableMouse(true)
+    // Define App
+	myApp := app.New()
 
-	// Define Tabbed Panels
-	panels := cview.NewTabbedPanels()
+    // Define Windows
+	myWindow := myApp.NewWindow("Vindicta")
 
-	// Properties of Panels
-	panels.SetBorder(true)
-	panels.SetBorderColor(tcell.ColorYellow)
-	panels.SetTitle("Vindicta")
-	panels.SetTitleColor(tcell.ColorBlue)
-	panels.SetTabTextColor(tcell.ColorPurple)
-	panels.SetBorderAttributes(tcell.AttrBold)
-	panels.SetTabBackgroundColor(tcell.ColorBlueViolet)
-	panels.SetTabTextColor(tcell.ColorWhite)
-	panels.SetTabBackgroundColorFocused(tcell.ColorOrange)
+    // Widget
+    successLogs := widget.NewLabel("")
+    errorLogs := widget.NewLabel("")
 
-	// Call UI Tabs for each
-	ssh := ui.SshPanel()
-	file := ui.FileSystemPanel()
 
-	// Add Tabs For Panels
-	panels.AddTab("ssh", "SSH", ssh)
-	panels.AddTab("firewall", "Firewall", cview.NewTextView())
-	panels.AddTab("filesystem", "Filesystem", file)
-	panels.AddTab("network", "Network", cview.NewTextView())
-	panels.AddTab("webserver", "Webserver", cview.NewTextView())
-	panels.AddTab("services", "Services", cview.NewTextView())
-	panels.AddTab("processes", "Processes", cview.NewTextView())
+    // Define Tabs for the windows
+	tabs := container.NewAppTabs(
+		container.NewTabItem("Successful SSH Logins", successLogs),
+		container.NewTabItem("Failed SSH Logins", errorLogs),
+		container.NewTabItem("Firewall Configuration", widget.NewLabel("Firewall")),
+		container.NewTabItem("Network Connections", widget.NewLabel("Network")),
+		container.NewTabItem("Webserver Logs", widget.NewLabel("Webserver")),
+		container.NewTabItem("Running Services", widget.NewLabel("Services")),
+		container.NewTabItem("Suspicious Processes", widget.NewLabel("Processes")),
+		container.NewTabItem("FileSystem Notifications", widget.NewLabel("FileSystem")),
+	)
 
-	// Set Panels as Root
-	app.SetRoot(panels, true)
+    // Sets tab location; looks best on the top
+	tabs.SetTabLocation(container.TabLocationTop)
 
-	if err := app.Run(); err != nil {
-		panic(err)
-	}
+    // Sets window's content to those defined tabs
+	myWindow.SetContent(tabs)
+
+
+    // Go Routines
+
+    // Successful SSH Logins
+    go func() {
+        for range time.Tick(time.Second / 2) {
+            ui.AccessLog(successLogs)
+        }
+    }()
+
+
+    // Failed SSH Logins
+    go func() {
+        for range time.Tick(time.Second / 2) {
+            ui.ErrorLog(errorLogs)
+        }
+    }()
+
+    // Shows and Runs the windows
+	myWindow.ShowAndRun()
 }
+

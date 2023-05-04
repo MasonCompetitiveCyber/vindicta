@@ -3,15 +3,19 @@ CCDC Blue Team Tool For Linux
 
 # Run
 ```
+Install packages with the command below:
 go mod tidy
-go run main.go
+
+Then, Either choose light or dark mode:
+FYNE_THEME=light go run main.go
+FYNE_THEME=dark go run ./main.go
 ```
 
 # Structure
 ```
-1. The Main TUI App is TabbedPanels Layout and the library used is https://code.rocketnine.space/tslocum/cview
-2. Code for each Tab is placed under detect directory
-3. Code for each Tab's UI is placed under ui directory
+1. This is GUI Application using Golang's Fyne Framework
+2. Main Function Sets GUI Tabbed Panel Widget
+3. Then, UI and Function for each tabs are defined under ui/ directory
 ```
 
 # ToDo List:
