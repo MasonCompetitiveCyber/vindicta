@@ -2,6 +2,8 @@ code.rocketnine.space/tslocum/cbind v0.1.5 h1:i6NkeLLNPNMS4NWNi3302Ay3zSU6MrqOT+
 code.rocketnine.space/tslocum/cbind v0.1.5/go.mod h1:LtfqJTzM7qhg88nAvNhx+VnTjZ0SXBJtxBObbfBWo/M=
 code.rocketnine.space/tslocum/cview v1.5.8 h1:G90dP78WmZ8obrLNggx9z4kPXgJDT/MhsKpEAoqqto8=
 code.rocketnine.space/tslocum/cview v1.5.8/go.mod h1:+MjJYGHPuMPgVgZEir/JZNIDFvsL87kOTzwIba6au2A=
+github.com/cakturk/go-netstat v0.0.0-20200220111822-e5b49efee7a5 h1:BjkPE3785EwPhhyuFkbINB+2a1xATwk8SNDWnJiD41g=
+github.com/cakturk/go-netstat v0.0.0-20200220111822-e5b49efee7a5/go.mod h1:jtAfVaU/2cu1+wdSRPWE2c1N2qeAA3K4RH9pYgqwets=
 github.com/fsnotify/fsnotify v1.6.0 h1:n+5WquG0fcWoWp6xPWfHdbskMCQaFnG6PfBrh1Ky4HY=
 github.com/fsnotify/fsnotify v1.6.0/go.mod h1:sl3t1tCWJFWoRz9R8WJCbQihKKwmorjAbSClcnxKAGw=
 github.com/gdamore/encoding v1.0.0 h1:+7OoQ1Bc6eTm5niUzBa0Ctsh6JbMW6Ra+YNuAtDBdko=
@@ -16,6 +18,8 @@ github.com/mattn/go-runewidth v0.0.10/go.mod h1:RAqKPSqVFrSLVXbA8x7dzmKdmGzieGRC
 github.com/mattn/go-runewidth v0.0.13/go.mod h1:Jdepj2loyihRzMpdS35Xk/zdY8IAYHsh153qUoGf23w=
 github.com/mattn/go-runewidth v0.0.14-0.20220323023645-f9d555329d96 h1:Fi8cONnzPQ1oBhXgY8DEtMiVNV+1oE7/Cw/MXIdAF/A=
 github.com/mattn/go-runewidth v0.0.14-0.20220323023645-f9d555329d96/go.mod h1:Jdepj2loyihRzMpdS35Xk/zdY8IAYHsh153qUoGf23w=
+github.com/mitchellh/go-ps v1.0.0 h1:i6ampVEEF4wQFF+bkYfwYgY+F/uYJDktmvLPf7qIgjc=
+github.com/mitchellh/go-ps v1.0.0/go.mod h1:J4lOc8z8yJs6vUwklHw2XEIiT4z4C40KtWVN3nvg8Pg=
 github.com/rivo/uniseg v0.1.0/go.mod h1:J6wj4VEh+S6ZtnVlnTBMWIodfgj8LQOQFoIToxlJtxc=
 github.com/rivo/uniseg v0.2.0/go.mod h1:J6wj4VEh+S6ZtnVlnTBMWIodfgj8LQOQFoIToxlJtxc=
 github.com/rivo/uniseg v0.3.1 h1:SDPP7SHNl1L7KrEFCSJslJ/DM9DT02Nq2C61XrfHMmk=

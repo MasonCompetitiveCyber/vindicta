@@ -26,7 +26,7 @@ Once this phase is solved, we can implement same idea for other items in the Tod
 - [ ] Integrate output of `Fsnotify` golang library to the app for filesystem changes notfications
 - [ ] Read Firewall configuration and display it on the app
 - [ ] Read Web Server Logs and display it on the app
-- [ ] Keep a track of network connections with something like `lsof` and display it on the app
+- [x] Keep a track of network connections with something like `lsof` and display it on the app
 - [ ] Gather suspicious processes and monitor their path in real time
 - [ ] Detect Scanning and Monitor suspicious IP addresses and Processes
 - [ ] List of Important Services and Their Status (Up / Down)

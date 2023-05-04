@@ -26,19 +26,22 @@ func main() {
 	panels.SetTabBackgroundColor(tcell.ColorBlueViolet)
 	panels.SetTabTextColor(tcell.ColorWhite)
 	panels.SetTabBackgroundColorFocused(tcell.ColorOrange)
+    panels.SetChangedFunc(func() {app.Draw()})
 
 	// Call UI Tabs for each
 	ssh := ui.SshPanel()
-	file := ui.FileSystemPanel()
+	file := ui.FileSystemPanel(app)
+    net := ui.DisplaySocks(app)
+    procs := ui.ListProcesses(app)
 
 	// Add Tabs For Panels
 	panels.AddTab("ssh", "SSH", ssh)
-	panels.AddTab("firewall", "Firewall", cview.NewTextView())
+	panels.AddTab("network", "Network", net)
 	panels.AddTab("filesystem", "Filesystem", file)
-	panels.AddTab("network", "Network", cview.NewTextView())
+	panels.AddTab("firewall", "Firewall", cview.NewTextView())
 	panels.AddTab("webserver", "Webserver", cview.NewTextView())
 	panels.AddTab("services", "Services", cview.NewTextView())
-	panels.AddTab("processes", "Processes", cview.NewTextView())
+	panels.AddTab("processes", "Processes", procs)
 
 	// Set Panels as Root
 	app.SetRoot(panels, true)
@@ -46,4 +49,6 @@ func main() {
 	if err := app.Run(); err != nil {
 		panic(err)
 	}
+
+
 }
