@@ -5,6 +5,8 @@ import (
 	"fyne.io/fyne/v2/widget"
 	"github.com/fsnotify/fsnotify"
 	"log"
+	"strings"
+	"sync"
 )
 
 func FileWatcher(path string, tab *widget.Label) {
@@ -16,6 +18,14 @@ func FileWatcher(path string, tab *widget.Label) {
 	}
 	defer watcher.Close()
 
+	// Create a slice to store the previous events
+	// Only records latest 1337 events
+	maxEvents := 1337
+	previousEvents := make([]string, 0, maxEvents)
+
+	// Create a mutex to synchronize access to the slice of events
+	var mutex sync.Mutex
+
 	// Make Channel
 	done := make(chan bool)
 
@@ -24,22 +34,26 @@ func FileWatcher(path string, tab *widget.Label) {
 		for {
 			select {
 			case event := <-watcher.Events:
-				if event.Op&fsnotify.Write == fsnotify.Write {
-					wrote := fmt.Sprintf("Modified file: %s", event.Name)
-					tab.SetText(wrote)
-				} else if event.Op&fsnotify.Rename == fsnotify.Rename {
-					renamed := fmt.Sprintf("Renamed file: %s", event.Name)
-					tab.SetText(renamed)
-				} else if event.Op&fsnotify.Create == fsnotify.Create {
-					created := fmt.Sprintf("Created file: %s", event.Name)
-					tab.SetText(created)
-				} else if event.Op&fsnotify.Chmod == fsnotify.Chmod {
-					perm := fmt.Sprintf("Permission changed on file: %s", event.Name)
-					tab.SetText(perm)
-				} else if event.Op&fsnotify.Remove == fsnotify.Remove {
-					removed := fmt.Sprintf("Removed file: %s", event.Name)
-					tab.SetText(removed)
+				// Lock the mutex before accessing the slice of events
+				mutex.Lock()
+				// Add the latest event to the beginning of the slice
+				previousEvents = append([]string{event.String()}, previousEvents...)
+				// Remove the last event if the slice exceeds the maximum size
+				if len(previousEvents) > maxEvents {
+					previousEvents = previousEvents[:maxEvents]
 				}
+				// Build the string from the slice using a string builder
+				var sb strings.Builder
+				for _, event := range previousEvents {
+					sb.WriteString(event)
+					sb.WriteString("\n")
+				}
+
+				// Set the string as the label text
+				tab.SetText(sb.String())
+
+				// Unlock the mutex after modifying the slice of events
+				mutex.Unlock()
 			case err := <-watcher.Errors:
 				criticalError := fmt.Sprintf("%s", err)
 				tab.SetText(criticalError)
@@ -52,6 +66,7 @@ func FileWatcher(path string, tab *widget.Label) {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	// Receive from done channel
 	<-done
 }
