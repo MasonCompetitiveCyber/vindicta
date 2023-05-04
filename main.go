@@ -11,18 +11,18 @@ import (
 
 func main() {
 
-    // Define App
+	// Define App
 	myApp := app.New()
 
-    // Define Windows
+	// Define Windows
 	myWindow := myApp.NewWindow("Vindicta")
 
-    // Widget
-    successLogs := widget.NewLabel("")
-    errorLogs := widget.NewLabel("")
+	// Widget
+	successLogs := widget.NewLabel("")
+	errorLogs := widget.NewLabel("")
+	fsMonitor := widget.NewLabel("")
 
-
-    // Define Tabs for the windows
+	// Define Tabs for the windows
 	tabs := container.NewAppTabs(
 		container.NewTabItem("Successful SSH Logins", successLogs),
 		container.NewTabItem("Failed SSH Logins", errorLogs),
@@ -31,34 +31,38 @@ func main() {
 		container.NewTabItem("Webserver Logs", widget.NewLabel("Webserver")),
 		container.NewTabItem("Running Services", widget.NewLabel("Services")),
 		container.NewTabItem("Suspicious Processes", widget.NewLabel("Processes")),
-		container.NewTabItem("FileSystem Notifications", widget.NewLabel("FileSystem")),
+		container.NewTabItem("FileSystem Notifications", fsMonitor),
 	)
 
-    // Sets tab location; looks best on the top
+	// Sets tab location; looks best on the top
 	tabs.SetTabLocation(container.TabLocationTop)
 
-    // Sets window's content to those defined tabs
+	// Sets window's content to those defined tabs
 	myWindow.SetContent(tabs)
 
+	// Go Routines Start Here
 
-    // Go Routines
+	// Successful SSH Logins
+	go func() {
+		for range time.Tick(time.Second / 2) {
+			ui.AccessLog(successLogs)
+		}
+	}()
 
-    // Successful SSH Logins
-    go func() {
-        for range time.Tick(time.Second / 2) {
-            ui.AccessLog(successLogs)
-        }
-    }()
+	// Failed SSH Logins
+	go func() {
+		for range time.Tick(time.Second / 2) {
+			ui.ErrorLog(errorLogs)
+		}
+	}()
 
+	// File System Monitoring
+	go func() {
+		for range time.Tick(time.Second / 2) {
+			ui.FileWatcher("/tmp", fsMonitor)
+		}
+	}()
 
-    // Failed SSH Logins
-    go func() {
-        for range time.Tick(time.Second / 2) {
-            ui.ErrorLog(errorLogs)
-        }
-    }()
-
-    // Shows and Runs the windows
+	// Shows and Runs the windows
 	myWindow.ShowAndRun()
 }
-
