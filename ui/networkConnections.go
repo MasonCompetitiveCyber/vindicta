@@ -27,7 +27,7 @@ func DisplaySocks(cviewApp *cview.Application) *cview.TextView {
 
 			if err != nil {
 				log.Fatal(err)
-			}
+            }
 
 			// Prepare the string to display in the view
 			var result string
