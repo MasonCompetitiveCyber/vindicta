@@ -2,19 +2,18 @@ package main
 
 import (
 	"code.rocketnine.space/tslocum/cview"
+	"fyne.io/fyne/v2/app"
 	"github.com/MasonCompetitiveCyber/vindicta/ui"
-	"github.com/gdamore/tcell/v2"
+	"maunium.net/go/tcell"
 )
 
 func main() {
-	// Define the Application
-	app := cview.NewApplication()
 
-	// Enable Using Mouse
-	app.EnableMouse(true)
+	// Define App
+	myApp := app.New()
 
-	// Define Tabbed Panels
-	panels := cview.NewTabbedPanels()
+	// Define Windows
+	myWindow := myApp.NewWindow("Vindicta")
 
 	// Properties of Panels
 	panels.SetBorder(true)
@@ -26,13 +25,13 @@ func main() {
 	panels.SetTabBackgroundColor(tcell.ColorBlueViolet)
 	panels.SetTabTextColor(tcell.ColorWhite)
 	panels.SetTabBackgroundColorFocused(tcell.ColorOrange)
-    panels.SetChangedFunc(func() {app.Draw()})
+	panels.SetChangedFunc(func() { app.Draw() })
 
 	// Call UI Tabs for each
 	ssh := ui.SshPanel()
 	file := ui.FileSystemPanel(app)
-    net := ui.DisplaySocks(app)
-    procs := ui.ListProcesses(app)
+	net := ui.DisplaySocks(app)
+	procs := ui.ListProcesses(app)
 
 	// Add Tabs For Panels
 	panels.AddTab("ssh", "SSH", ssh)
@@ -43,12 +42,11 @@ func main() {
 	panels.AddTab("services", "Services", cview.NewTextView())
 	panels.AddTab("processes", "Processes", procs)
 
-	// Set Panels as Root
-	app.SetRoot(panels, true)
+	// Sets window's content to those defined tabs
+	myWindow.SetContent(tabs)
 
 	if err := app.Run(); err != nil {
 		panic(err)
 	}
-
 
 }

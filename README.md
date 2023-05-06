@@ -1,10 +1,16 @@
 # Vindicta
 CCDC Blue Team Tool For Linux
 
+# <b>Check tui branch for development and contribution.</b>
+
 # Run
 ```
+Install packages with the command below:
 go mod tidy
-go run main.go
+
+Then, Either choose light or dark mode:
+FYNE_THEME=light go run main.go
+FYNE_THEME=dark go run ./main.go
 ```
 
 # Structure
