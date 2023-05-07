@@ -1,10 +1,10 @@
-package ui
+package monitor
 
 import (
-    "time"
 	"fmt"
 	"log"
 	"strings"
+	"time"
 
 	"code.rocketnine.space/tslocum/cview"
 	"github.com/fsnotify/fsnotify"
@@ -38,14 +38,13 @@ func FileSystemPanel(cviewApp *cview.Application) *cview.TextView {
 
 	// Start a goroutine to watch for file system changes
 	go func() {
-        defer watcher.Close()
+		defer watcher.Close()
 		for {
 			select {
 			case event := <-watcher.Events:
 
 				// Prepare the string to display in the view
-                result := fmt.Sprintf("%s: %s", time.Now().Format("2006-01-02 15:04:05"), event.String())
-
+				result := fmt.Sprintf("%s: %s", time.Now().Format("2006-01-02 15:04:05"), event.String())
 
 				// Add the new event to the beginning of the events slice
 				events = append([]string{result}, events...)

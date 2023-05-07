@@ -6,6 +6,7 @@ import (
 	"os/exec"
 )
 
+// Get Successful SSH Logins
 func AccessLog() string {
 	if _, err := os.Stat("/var/log/auth.log"); err == nil {
 		acLog, err := exec.Command("bash", "-c", "cat /var/log/auth.log | grep -i \"Accepted password\" ").Output()
@@ -24,11 +25,12 @@ func AccessLog() string {
 	}
 }
 
+// Get Failed SSH Logins
 func ErrorLog() string {
 	if _, err := os.Stat("/var/log/auth.log"); err == nil {
 		erLog, err := exec.Command("bash", "-c", "cat /var/log/auth.log | grep -i \"Failed password\" ").Output()
 
-		if err != nil {	
+		if err != nil {
 			log.Fatalf("Error related to /var/log/auth.log %s", err)
 		}
 		return string(erLog)

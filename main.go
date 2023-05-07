@@ -2,7 +2,7 @@ package main
 
 import (
 	"code.rocketnine.space/tslocum/cview"
-	"github.com/MasonCompetitiveCyber/vindicta/ui"
+	"github.com/MasonCompetitiveCyber/vindicta/monitor"
 	"github.com/gdamore/tcell/v2"
 )
 
@@ -26,22 +26,25 @@ func main() {
 	panels.SetTabBackgroundColor(tcell.ColorBlueViolet)
 	panels.SetTabTextColor(tcell.ColorWhite)
 	panels.SetTabBackgroundColorFocused(tcell.ColorOrange)
-    panels.SetChangedFunc(func() {app.Draw()})
+
+	// Redraw on some change
+	panels.SetChangedFunc(func() { app.Draw() })
 
 	// Call UI Tabs for each
-	ssh := ui.SshPanel()
-	file := ui.FileSystemPanel(app)
-    net := ui.DisplaySocks(app)
-    procs := ui.ListProcesses(app)
+	// SSH Logs Tab
+	ssh := monitor.SshPanel()
+	// File System Monitoring Tab
+	file := monitor.FileSystemPanel(app)
+	// Network Connections and Process Monitoring Tab
+	netproc := monitor.DisplaySocks(app)
 
-	// Add Tabs For Panels
+	// Attach The Tabs Above To The Panels
 	panels.AddTab("ssh", "SSH", ssh)
-	panels.AddTab("network", "Network", net)
+	panels.AddTab("NetAndProc", "Network and Processes", netproc)
 	panels.AddTab("filesystem", "Filesystem", file)
 	panels.AddTab("firewall", "Firewall", cview.NewTextView())
 	panels.AddTab("webserver", "Webserver", cview.NewTextView())
 	panels.AddTab("services", "Services", cview.NewTextView())
-	panels.AddTab("processes", "Processes", procs)
 
 	// Set Panels as Root
 	app.SetRoot(panels, true)
@@ -49,6 +52,5 @@ func main() {
 	if err := app.Run(); err != nil {
 		panic(err)
 	}
-
 
 }
