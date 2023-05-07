@@ -13,8 +13,7 @@ go run main.go
 # Structure
 ```
 1. The Main TUI App is TabbedPanels Layout and the library used is https://code.rocketnine.space/tslocum/cview
-2. Code for each Tab's UI and function is placed under monitor directory
-3. detect has sshLogs.go file which will be moved to monitor later on
+2. Code for each Tab's UI and function is placed under monitor package
 ```
 
 # ToDo List:
@@ -29,7 +28,7 @@ Once this phase is solved, we can implement same idea for other items in the Tod
 - [x] Integrate output of `Fsnotify` golang library to the app for filesystem changes notfications
 - [ ] Read Firewall configuration and display it on the app
 - [ ] Read Web Server Logs and display it on the app
-- [x] Keep a track of network connections with something like `lsof` and display it on the app
+- [x] Keep a track of network connections and display it on the app
 - [x] Gather suspicious processes and monitor their path in real time. `Halfway Done`
 - [ ] Detect Scanning and Monitor suspicious IP addresses and Processes
 - [ ] List of Important Services and Their Status (Up / Down)

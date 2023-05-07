@@ -32,7 +32,7 @@ func main() {
 
 	// Call UI Tabs for each
 	// SSH Logs Tab
-	ssh := monitor.SshPanel()
+	ssh := monitor.SshLogs(app)
 	// File System Monitoring Tab
 	file := monitor.FileSystemPanel(app)
 	// Network Connections and Process Monitoring Tab
