@@ -1,5 +1,5 @@
 # Vindicta
-CCDC Blue Team Tool For Linux
+Blue Team Monitoring Tool For Linux that runs within a Terminal
 
 # Run
 ```
