@@ -5,7 +5,9 @@ import (
 	"io/ioutil"
 	"os"
 	"os/exec"
+	"regexp"
 	"strings"
+	"time"
 
 	"code.rocketnine.space/tslocum/cview"
 	"github.com/gdamore/tcell/v2"
@@ -83,9 +85,12 @@ func monitorLogs(app *cview.Application, successLogs *cview.TextView, errorLogs 
 
 	// Extract the value of ID field
 	var osType string
+
 	for _, line := range strings.Split(strContent, "\n") {
-		if strings.HasPrefix(line, "ID=") {
-			osType = strings.TrimPrefix(line, "ID=")
+		b, _ := regexp.MatchString("\\bID=\\b", line)
+		if b == true {
+			name := strings.Split(line, "=")
+			osType = name[1]
 			break
 		}
 	}
@@ -146,5 +151,8 @@ func monitorLogs(app *cview.Application, successLogs *cview.TextView, errorLogs 
 			successLogs.ScrollToEnd()
 			errorLogs.ScrollToEnd()
 		})
+
+		// Don't be too fast
+		time.Sleep(time.Second)
 	}
 }
