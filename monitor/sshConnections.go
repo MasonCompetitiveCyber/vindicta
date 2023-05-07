@@ -87,7 +87,7 @@ func monitorLogs(app *cview.Application, successLogs *cview.TextView, errorLogs 
 	var osType string
 
 	for _, line := range strings.Split(strContent, "\n") {
-		b, _ := regexp.MatchString("\\bID=\\b", line)
+		b, _ := regexp.MatchString("\\bID\\b", line)
 		if b == true {
 			name := strings.Split(line, "=")
 			osType = name[1]
