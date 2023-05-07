@@ -24,7 +24,7 @@ Work to be done are listed below:
 
 For gathering information in real time and rendering it in the app, concurrency might be involved.
 Once this phase is solved, we can implement same idea for other items in the Todo list below.
-- [ ] Find a way to display ssh logs on real time to the app
+- [x] Find a way to display ssh logs on real time to the app
 - [x] Integrate output of `Fsnotify` golang library to the app for filesystem changes notfications
 - [ ] Read Firewall configuration and display it on the app
 - [ ] Read Web Server Logs and display it on the app

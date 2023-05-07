@@ -93,6 +93,7 @@ func monitorLogs(app *cview.Application, successLogs *cview.TextView, errorLogs 
 	}
 
 	// Use the appropriate log file to monitor SSH logs
+    for{
 	var logFile string
 	switch osType {
 	case "arch":
@@ -147,5 +148,6 @@ func monitorLogs(app *cview.Application, successLogs *cview.TextView, errorLogs 
 		successLogs.ScrollToEnd()
 		errorLogs.ScrollToEnd()
 	})
+    }
 }
 
