@@ -1,7 +1,21 @@
 # Vindicta
 Blue Team Monitoring Tool For Linux that runs within a Terminal
 
-# Run
+# Install and Run
+Install golang
+https://go.dev/doc/install
+```
+rm -rf /usr/local/go && tar -C /usr/local -xzf go1.20.4.linux-amd64.tar.gz
+export PATH=$PATH:/usr/local/go/bin
+echo "PATH=$PATH:/usr/local/go/bin" >> ~/.bashrc
+go version
+```
+Install Vindicta 
+```
+git clone https://github.com/MasonCompetitiveCyber/vindicta.git
+cd vindicta
+```
+Run Vindicta
 ```
 go mod tidy
 go run main.go
