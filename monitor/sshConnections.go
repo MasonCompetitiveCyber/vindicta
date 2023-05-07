@@ -1,8 +1,8 @@
 package monitor
 
 import (
-	"bufio"
-	"io"
+	"fmt"
+	"io/ioutil"
 	"os"
 	"os/exec"
 	"strings"
@@ -73,77 +73,79 @@ func setViewLogs(text string, color tcell.Color) *cview.TextView {
 	return myView
 }
 
-// Check For Logs
 func monitorLogs(app *cview.Application, successLogs *cview.TextView, errorLogs *cview.TextView) {
+	// Read the contents of /etc/os-release to determine the appropriate log file to monitor
+	content, err := ioutil.ReadFile("/etc/os-release")
+	if err != nil {
+		// handle error
+	}
 
-    for{
-    // Check ssh logs using journalctl command
-    cmd := exec.Command("journalctl", "-u", "sshd")
-    out, err := cmd.Output()
+	// Convert byte slice to string
+	strContent := string(content)
 
-    if err == nil {
-        // Update successLogs and errorLogs with logs from journalctl output
-        lines := strings.Split(string(out), "\n")
-        successText := ""
-        errorText := ""
-        for _, line := range lines {
-            if strings.Contains(line, "Accepted") {
-                successText += line + "\n"
-            } else if strings.Contains(line, "Failed") {
-                errorText += line + "\n"
-            }
-        }
-        successLogs.SetText(successText)
-        errorLogs.SetText(errorText)
+	// Extract the value of ID_LIKE field
+	var osType string
+	for _, line := range strings.Split(strContent, "\n") {
+		if strings.HasPrefix(line, "ID_LIKE=") {
+			osType = strings.TrimPrefix(line, "ID_LIKE=")
+			break
+		}
+	}
 
-        // Schedule an update and redraw of the application's screen
-        app.QueueUpdateDraw(func() {
-            successLogs.ScrollToEnd()
-            errorLogs.ScrollToEnd()
-        })
+	// Use the appropriate log file to monitor SSH logs
+	var logFile string
+	switch osType {
+	case "arch":
+		cmd := exec.Command("journalctl", "-u", "sshd")
+		out, err := cmd.Output()
+		if err != nil {
+			errorLogs.SetText(fmt.Sprintf("ERROR: Could not read logs from %s: %s", "journalctl -u sshd", err.Error()))
+			return
+		}
+		logFile = string(out)
+	case "debian":
+		file, err := os.Open("/var/log/auth.log")
+		if err != nil {
+			errorLogs.SetText(fmt.Sprintf("ERROR: Could not read logs from %s: %s", "/var/log/auth.log", err.Error()))
+			return
+		}
+		defer file.Close()
+		fileInfo, err := file.Stat()
+		if err != nil {
+			errorLogs.SetText(fmt.Sprintf("ERROR: Could not read logs from %s: %s", "/var/log/auth.log", err.Error()))
+			return
+		}
+		size := fileInfo.Size()
+		buffer := make([]byte, size)
+		_, err = file.Read(buffer)
+		if err != nil {
+			errorLogs.SetText(fmt.Sprintf("ERROR: Could not read logs from %s: %s", "/var/log/auth.log", err.Error()))
+			return
+		}
+		logFile = string(buffer)
+	default:
+		errorLogs.SetText("ERROR: Unknown or unsupported OS type")
+		return
+	}
 
-        return
-    }
+	// Monitor the SSH logs in the selected log file
+	lines := strings.Split(logFile, "\n")
+	successText := ""
+	errorText := ""
+	for _, line := range lines {
+		if strings.Contains(line, "Accepted") {
+			successText += line + "\n"
+		} else if strings.Contains(line, "Failed") {
+			errorText += line + "\n"
+		}
+	}
+	successLogs.SetText(successText)
+	errorLogs.SetText(errorText)
 
-    // If there was an error with journalctl, check /var/log/auth.log
-    logFile, err := os.Open("/var/log/auth.log")
-    if err != nil {
-        errorLogs.SetText("ERROR: Could not open /var/log/auth.log")
-        return
-    }
-    defer logFile.Close()
-
-    reader := bufio.NewReader(logFile)
-    successText := ""
-    errorText := ""
-
-    for {
-        line, err := reader.ReadString('\n')
-        if err != nil && err != io.EOF {
-            errorLogs.SetText("ERROR: Problem reading logs from /var/log/auth.log")
-            return
-        }
-
-        if strings.Contains(line, "sshd") {
-            if strings.Contains(line, "Accepted") {
-                successText += line
-            } else if strings.Contains(line, "Failed") {
-                errorText += line
-            }
-        }
-
-        if err == io.EOF {
-            successLogs.SetText(successText)
-            errorLogs.SetText(errorText)
-
-            // Schedule an update and redraw of the application's screen
-            app.QueueUpdateDraw(func() {
-                successLogs.ScrollToEnd()
-                errorLogs.ScrollToEnd()
-            })
-            break
-        }
-    }
-    }
-
+	// Schedule an update and redraw of the application's screen
+	app.QueueUpdateDraw(func() {
+		successLogs.ScrollToEnd()
+		errorLogs.ScrollToEnd()
+	})
 }
+

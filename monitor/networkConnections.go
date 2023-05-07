@@ -57,6 +57,7 @@ func DisplaySocks(cviewApp *cview.Application) *cview.TextView {
 					} else {
 						cwd = "N/A"
 					}
+
 				} else {
 					pid = "N/A"
 				}
