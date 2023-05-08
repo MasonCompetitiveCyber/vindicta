@@ -17,7 +17,7 @@ func getPermissions(filename string) string{
     info, err := os.Stat(filename)
     // panic if there is an error
     if err != nil {
-        panic(err)
+        return "Deleted"
     }
 
     // grab permissions (very verbose)
@@ -56,6 +56,7 @@ func FileSystemPanel(cviewApp *cview.Application) *cview.TextView {
 
 	// Keep track of the latest 50 events
 	var events []string
+    var result string
 
 	// Start a goroutine to watch for file system changes
 	go func() {
@@ -73,8 +74,11 @@ func FileSystemPanel(cviewApp *cview.Application) *cview.TextView {
 				perms := getPermissions(filename)
 
 				// Prepare the string to display in the view
-
-				result := fmt.Sprintf("%s: %s %s", time.Now().Format("2006-01-02 15:04:05"), perms, event.String())
+                if perms != "Deleted" {
+				    result = fmt.Sprintf("%s: %s %s", time.Now().Format("2006-01-02 15:04:05"), perms, event.String())
+                } else {
+				    result = fmt.Sprintf("%s: %-9s %s", time.Now().Format("2006-01-02 15:04:05"), "", event.String())
+                }
 
 				// Add the new event to the beginning of the events slice
 				events = append([]string{result}, events...)
