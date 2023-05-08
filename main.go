@@ -45,6 +45,7 @@ func main() {
 	panels.AddTab("firewall", "[4] Firewall", cview.NewTextView())
 	panels.AddTab("webserver", "[5] Webserver", cview.NewTextView())
 	panels.AddTab("services", "[6] Services", cview.NewTextView())
+	panels.AddTab("kill", "[7] Kill Process", cview.NewTextView())
 
     app.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
         if event.Rune() == 113 {  // 113 means q
@@ -61,6 +62,8 @@ func main() {
             panels.SetCurrentTab("webserver")
         } else if event.Rune() == 54 {
             panels.SetCurrentTab("services")
+        } else if event.Rune() == 55 {
+            panels.SetCurrentTab("kill")
         }
 
         return event
