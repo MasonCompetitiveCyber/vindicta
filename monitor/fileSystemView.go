@@ -5,11 +5,32 @@ import (
 	"log"
 	"strings"
 	"time"
+	"os"
 
 	"code.rocketnine.space/tslocum/cview"
 	"github.com/fsnotify/fsnotify"
 	"github.com/gdamore/tcell/v2"
 )
+
+func getPermissions(filename string) string{
+    // get info and potential errors
+    info, err := os.Stat(filename)
+    // panic if there is an error
+    if err != nil {
+        panic(err)
+    }
+
+    // grab permissions (very verbose)
+    mode := info.Mode()
+    temp := ""
+    
+    // Loop through verbose output to just get rwx
+    for i := 1; i < 10; i++ {
+        temp += string(mode.String()[i])
+    }
+    // return rwx permissions
+    return temp
+}
 
 func FileSystemPanel(cviewApp *cview.Application) *cview.TextView {
 	view := cview.NewTextView()
@@ -42,9 +63,18 @@ func FileSystemPanel(cviewApp *cview.Application) *cview.TextView {
 		for {
 			select {
 			case event := <-watcher.Events:
+                                // store filename (ex: CHMOD "/tmp/grass")
+				filename := event.String()
+                                
+                                // parse filename to only have filename
+				filename = strings.Split(filename, "\"")[1]
+                                
+                                // pass parsed filename to getPermissions
+				perms := getPermissions(filename)
 
 				// Prepare the string to display in the view
-				result := fmt.Sprintf("%s: %s", time.Now().Format("2006-01-02 15:04:05"), event.String())
+
+				result := fmt.Sprintf("%s: %s %s", time.Now().Format("2006-01-02 15:04:05"), perms, event.String())
 
 				// Add the new event to the beginning of the events slice
 				events = append([]string{result}, events...)
