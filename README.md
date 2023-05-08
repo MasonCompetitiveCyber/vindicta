@@ -8,9 +8,10 @@ https://go.dev/doc/install
 rm -rf /usr/local/go && tar -C /usr/local -xzf go1.20.4.linux-amd64.tar.gz
 export PATH=$PATH:/usr/local/go/bin
 echo "PATH=$PATH:/usr/local/go/bin" >> ~/.bashrc 
-*Note: .bashrc should be replaced with your current terminal, ex: .zshrc*
 go version
 ```
+*Note: .bashrc should be replaced with your current terminal, ex: .zshrc*
+
 Install Vindicta 
 ```
 git clone https://github.com/MasonCompetitiveCyber/vindicta.git
