@@ -25,13 +25,38 @@ func getPermissions(filename string) string{
     temp := ""
     
     // Loop through verbose output to just get rwx
-    for i := 1; i < 10; i++ {
+    for i := 0; i < 10; i++ {
         temp += string(mode.String()[i])
     }
     // return rwx permissions
     return temp
 }
 
+
+// Input Box to ask for paths for monitoring
+func CreateInput(panels *cview.TabbedPanels, app *cview.Application) func() {
+    form := cview.NewForm()
+    form.AddInputField("File Paths to monitor", "", 100, nil, nil)
+    form.AddButton("Start Monitoring",  func() {
+        panels.SetCurrentTab("filesystem")  // Set the current tab to "filesystem"
+        app.SetRoot(panels, true)           // Set the root view to the tabbed panels
+    })
+    form.SetBorder(true)
+    form.SetBorderColor(tcell.ColorPurple)
+    form.SetFieldBackgroundColor(tcell.ColorBlue)
+    form.SetFieldBackgroundColorFocused(tcell.ColorGray)
+    form.SetFieldTextColorFocused(tcell.ColorBlue)
+    form.SetTitle("Files and Directories")
+    form.SetTitleAlign(cview.AlignCenter)
+    form.SetRect(60, 10, 80, 30)
+
+    return func() {
+        app.SetRoot(form, false)
+    }
+}
+
+
+// File System Monitoring
 func FileSystemPanel(cviewApp *cview.Application) *cview.TextView {
 	view := cview.NewTextView()
 	view.SetTitle("Suspicious File System Activities")
@@ -50,6 +75,7 @@ func FileSystemPanel(cviewApp *cview.Application) *cview.TextView {
 
 	// Add a watch to the watcher for the specified directory
 	err = watcher.Add("/tmp")
+
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -77,7 +103,7 @@ func FileSystemPanel(cviewApp *cview.Application) *cview.TextView {
                 if perms != "Deleted" {
 				    result = fmt.Sprintf("%s: %s %s", time.Now().Format("2006-01-02 15:04:05"), perms, event.String())
                 } else {
-				    result = fmt.Sprintf("%s: %-9s %s", time.Now().Format("2006-01-02 15:04:05"), "", event.String())
+				    result = fmt.Sprintf("%s: %-10s %s", time.Now().Format("2006-01-02 15:04:05"), "", event.String())
                 }
 
 				// Add the new event to the beginning of the events slice

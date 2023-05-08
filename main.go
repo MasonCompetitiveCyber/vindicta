@@ -64,6 +64,11 @@ func main() {
             panels.SetCurrentTab("services")
         } else if event.Rune() == 55 {
             panels.SetCurrentTab("kill")
+        } else if event.Rune() == 35 {  // Uppercase # for editing
+            // Call the CreateInput function and get the callback function
+            inputCallback := monitor.CreateInput(panels, app)
+            // Call the callback function to display the form
+            inputCallback()
         }
 
         return event
@@ -77,3 +82,4 @@ func main() {
 	}
 
 }
+
