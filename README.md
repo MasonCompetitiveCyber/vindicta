@@ -10,7 +10,7 @@ export PATH=$PATH:/usr/local/go/bin
 echo "PATH=$PATH:/usr/local/go/bin" >> ~/.bashrc 
 go version
 ```
-*Note: .bashrc should be replaced with your current terminal, ex: .zshrc*
+*Note: .bashrc should be replaced with your current terminal(echo $SHELL), ex: .zshrc*
 
 Install Vindicta 
 ```
