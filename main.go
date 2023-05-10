@@ -38,7 +38,8 @@ func main() {
 	// Network Connections and Process Monitoring Tab
 	netproc := monitor.DisplaySocks(app)
 	// Firewall Tab
-	fire := monitor.ConfigureFirewall(app)
+        fire := monitor.ConfigureFirewall(app)
+        services := monitor.ConfigureServices(app)
 
 	// Attach The Tabs Above To The Panels
 	panels.AddTab("ssh", "[1] SSH", ssh)
@@ -46,7 +47,7 @@ func main() {
 	panels.AddTab("filesystem", "[3] Filesystem", file)
 	panels.AddTab("firewall", "[4] Firewall", fire)
 	panels.AddTab("webserver", "[5] Webserver", cview.NewTextView())
-	panels.AddTab("services", "[6] Services", cview.NewTextView())
+	panels.AddTab("services", "[6] Services", services)
 	panels.AddTab("kill", "[7] Kill Process", cview.NewTextView())
 
     app.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
