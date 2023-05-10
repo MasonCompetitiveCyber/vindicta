@@ -44,7 +44,8 @@ Once this phase is solved, we can implement same idea for other items in the Tod
 - [x] Find a way to display ssh logs on real time to the app
 - [x] Integrate output of `Fsnotify` golang library to the app for filesystem changes notfications
 - [ ] Take file paths to monitor as user input from Form. Currently pressing `Shift 3` asks for path. Need to have a function to handle the input paths.
-- [ ] Read Firewall configuration and display it on the app
+- [x] Read Firewall configuration and display it on the app `Finished, but layout needs improvement`
+- [ ] Add, delete, and edit Firewall rules from within the app
 - [ ] Read Web Server Logs and display it on the app
 - [x] Keep a track of network connections and display it on the app
 - [x] Gather suspicious processes and monitor their path in real time. `Halfway Done`
