@@ -37,12 +37,14 @@ func main() {
 	file := monitor.FileSystemPanel(app)
 	// Network Connections and Process Monitoring Tab
 	netproc := monitor.DisplaySocks(app)
+	// Firewall Tab
+	fire := monitor.ConfigureFirewall(app)
 
 	// Attach The Tabs Above To The Panels
 	panels.AddTab("ssh", "[1] SSH", ssh)
 	panels.AddTab("NetAndProc", "[2] Network and Processes", netproc)
 	panels.AddTab("filesystem", "[3] Filesystem", file)
-	panels.AddTab("firewall", "[4] Firewall", cview.NewTextView())
+	panels.AddTab("firewall", "[4] Firewall", fire)
 	panels.AddTab("webserver", "[5] Webserver", cview.NewTextView())
 	panels.AddTab("services", "[6] Services", cview.NewTextView())
 	panels.AddTab("kill", "[7] Kill Process", cview.NewTextView())
