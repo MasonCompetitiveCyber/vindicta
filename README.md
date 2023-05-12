@@ -42,7 +42,7 @@ Work to be done are listed below:
 For gathering information in real time and rendering it in the app, concurrency might be involved.
 Once this phase is solved, we can implement same idea for other items in the Todo list below.
 - [x] Find a way to display ssh logs on real time to the app
-- [x] Integrate output of `Fsnotify` golang library to the app for filesystem changes notfications
+- [x] Integrate output of `Fsnotify` golang library to the app for filesystem changes notifications
 - [ ] Take file paths to monitor as user input from Form. Currently pressing `Shift 3` asks for path. Need to have a function to handle the input paths.
 - [x] Read Firewall configuration and display it on the app `Finished, but layout needs improvement`
 - [ ] Add, delete, and edit Firewall rules from within the app
