@@ -51,7 +51,7 @@ Once this phase is solved, we can implement same idea for other items in the Tod
 - [ ] Detect Scanning and Monitor suspicious IP addresses and Processes
 
 #### Filesystem
-- [x] Integrate output of `Fsnotify` golang library to the app for filesystem changes notfications
+- [x] Integrate output of `Fsnotify` golang library to the app for filesystem changes notifications
 - [ ] Take file paths to monitor as user input from Form. Currently pressing `Shift 3` asks for path. Need to have a function to handle the input paths.
 
 #### Firewall
