@@ -55,8 +55,10 @@ Once this phase is solved, we can implement same idea for other items in the Tod
 - [ ] Take file paths to monitor as user input from Form. Currently pressing `Shift 3` asks for path. Need to have a function to handle the input paths.
 
 #### Firewall
-- [x] Read Firewall configuration and display it on the app `Finished, but layout needs improvement`
+- [x] Read Firewall configuration and display it on the app
+- [ ] Add concurrency to update firewall once it is displayed
 - [ ] Add, delete, and edit Firewall rules from within the app
+- [ ] Clear redundant functions from previous commits `Will be fixed after fully-working code is pushed`
 
 #### Webserver
 - [ ] Read Web Server Logs and display it on the app
