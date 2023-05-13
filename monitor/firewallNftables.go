@@ -11,32 +11,219 @@ import (
 )
 
 func ConfigureFirewall(myCviewApp *cview.Application) *cview.Flex {
+	myFlex := setMainMenu()
+    	return myFlex
+}
 
-    myFlex := cview.NewFlex()
-    myFlex.SetBorder(true)
-    myFlex.SetBorderColor(tcell.ColorPurple)
+func setMainMenu(flexs ...*cview.Flex) *cview.Flex {
+	var myFlex *cview.Flex
+	if len(flexs) != 0 {
+		myFlex = flexs[0]
+		for i := 0; i < len(flexs); i++ {
+			if i !=0 {
+				myFlex.RemoveItem(flexs[i])
+			}
+		}
+	} else {
+    		myFlex = cview.NewFlex()
+    		myFlex.SetBorder(true)
+    		myFlex.SetBorderColor(tcell.ColorPurple)
+	}
+    	subFlex := cview.NewFlex()
+    	subFlex.SetDirection(cview.FlexRow)
+    
+    	listButton := Button("List")
+    	listButton.SetSelectedFunc(func() {viewFirewall(myFlex, subFlex)})
+	addButton := Button("Add")
+	addButton.SetSelectedFunc(func() {addRule(myFlex, subFlex)})
+	deleteButton := Button("Delete")
+	deleteButton.SetSelectedFunc(func() {deleteRule(myFlex, subFlex)})
+	
+    	subFlex.AddItem(listButton, 0, 1, false)
+    	subFlex.AddItem(addButton, 0, 1, false)
+    	subFlex.AddItem(Button("Edit"), 0, 1, false)
+    	subFlex.AddItem(deleteButton, 0, 1, false)
+    	subFlex.AddItem(TextBox("TBD"), 0, 5, false)
+    
+    	myFlex.AddItem(subFlex, 0, 1, false)
 
-    subFlex := cview.NewFlex()
-    subFlex.SetDirection(cview.FlexRow)
-    subFlex.AddItem(Button("List"), 0, 1, false)
-    subFlex.AddItem(Button("Add"), 0, 1, false)
-    subFlex.AddItem(Button("Edit"), 0, 1, false)
-    subFlex.AddItem(Button("Delete"), 0, 1, false)
-    subFlex.AddItem(TextBox("TBD"), 0, 5, false)
+	return myFlex
+}
 
 
-    dropFlex := cview.NewFlex()
-    dropFlex.SetDirection(cview.FlexRow)
+func viewFirewall(myFlex *cview.Flex, subFlex *cview.Flex) {
+	myFlex.RemoveItem(subFlex)
+	nsubFlex := cview.NewFlex()
+	fwFlex := cview.NewFlex()
+	
+	backButton := Button("Back")
+	backButton.SetSelectedFunc(func() {setMainMenu(myFlex, nsubFlex, fwFlex)})
 
-    dropFlex.AddItem(DropDownMenu("Tables: "), 0, 1, false)
-    dropFlex.AddItem(DropDownMenu("Chains: "), 0, 1, false)
-    dropFlex.AddItem(DropDownMenu("Rules: "), 0, 1, false)
+	nsubFlex.SetDirection(cview.FlexRow)
+	nsubFlex.AddItem(backButton, 0, 1, false)
+	nsubFlex.AddItem(TextBox(""), 0, 8, false)
 
-    myFlex.AddItem(subFlex, 0, 1, false)
-    myFlex.AddItem(dropFlex, 0, 8, false)
-    //myFlex.AddItem(TextBox("Nftables"), 0, 8, false)
 
-    return myFlex
+	cmd := exec.Command("nft", "list", "ruleset")
+	out, err := cmd.Output()
+	if err != nil{
+		log.Fatal(err)
+	}
+	ruleList := TextBox("FIREWALL RULES")
+	ruleList.SetText(string(out))
+	ruleList.SetScrollable(true)
+	ruleList.SetWrap(true)
+	ruleList.SetWordWrap(true)
+	
+	fwFlex.SetDirection(cview.FlexRow)
+	fwFlex.AddItem(ruleList, 0, 1, false)
+
+	myFlex.SetDirection(cview.FlexColumn)
+    	myFlex.AddItem(nsubFlex, 0, 1, false)
+	myFlex.AddItem(fwFlex, 0, 8, false)
+	
+	return
+}
+
+func deleteRule(flexs ...*cview.Flex) {
+	var myFlex *cview.Flex
+	myFlex = flexs[0]
+	for i := 0; i < len(flexs); i++ {
+		if i !=0 {
+			myFlex.RemoveItem(flexs[i])
+		}
+	}
+
+	subFlex := cview.NewFlex()
+	delFlex := cview.NewFlex()
+	
+	backButton := Button("Back")
+	backButton.SetSelectedFunc(func() {setMainMenu(myFlex, subFlex, delFlex)})
+
+	subFlex.SetDirection(cview.FlexRow)
+	subFlex.AddItem(backButton, 0, 1, false)
+	tbox := TextBox("Example")
+	tbox.SetText("inet table1 chain3 6\n\n------------\n\n[Family] [Table] [Chain] [Handle#]")
+	tbox.SetWrap(true)
+	tbox.SetWordWrap(true)
+	
+	subFlex.AddItem(tbox, 0, 8, false)
+
+
+	cmd := exec.Command("nft", "--handle", "list", "ruleset")
+	out, err := cmd.Output()
+	if err != nil{
+		log.Fatal(err)
+	}
+	ruleList := TextBox("FIREWALL RULES")
+	ruleList.SetText(string(out))
+	ruleList.SetScrollable(true)
+	ruleList.SetWrap(true)
+	ruleList.SetWordWrap(true)
+	
+	inputBox := cview.NewForm()
+	inputBox.SetHorizontal(true)
+	inputBox.AddInputField("Delete Rule", "family table chain handle", 100, nil, nil)
+	inputBox.AddButton("Delete", func() {
+		pushDelete(inputBox.GetFormItem(0).(*cview.InputField).GetText()) 
+		deleteRule(myFlex, subFlex, delFlex)
+	})
+
+	delFlex.SetDirection(cview.FlexRow)
+	delFlex.AddItem(ruleList, 0, 8, false)
+	delFlex.AddItem(inputBox, 0, 1, false)
+
+	myFlex.SetDirection(cview.FlexColumn)
+    	myFlex.AddItem(subFlex, 0, 1, false)
+	myFlex.AddItem(delFlex, 0, 8, false)
+	
+	return
+}
+
+func addRule(flexs ...*cview.Flex) {
+	var myFlex *cview.Flex
+	myFlex = flexs[0]
+	for i := 0; i < len(flexs); i++ {
+		if i !=0 {
+			myFlex.RemoveItem(flexs[i])
+		}
+	}
+	
+	subFlex := cview.NewFlex()
+	addFlex := cview.NewFlex()
+	
+	backButton := Button("Back")
+	backButton.SetSelectedFunc(func() {setMainMenu(myFlex, subFlex, addFlex)})
+
+	subFlex.SetDirection(cview.FlexRow)
+	subFlex.AddItem(backButton, 0, 1, false)
+	tbox := TextBox("Example")
+	tbox.SetText("inet table1 chain3 ip saddr 8.8.8.8 accept\n\n------------\n\n[Family] [Table] [Chain] [New rule]")
+	tbox.SetWrap(true)
+	tbox.SetWordWrap(true)
+	subFlex.AddItem(tbox, 0, 8, false)
+
+
+	cmd := exec.Command("nft", "list", "ruleset")
+	out, err := cmd.Output()
+	if err != nil{
+		log.Fatal(err)
+	}
+	ruleList := TextBox("FIREWALL RULES")
+	ruleList.SetText(string(out))
+	ruleList.SetScrollable(true)
+	ruleList.SetWrap(true)
+	ruleList.SetWordWrap(true)
+	
+	inputBox := cview.NewForm()
+	inputBox.SetHorizontal(true)
+	inputBox.AddInputField("Add Rule", "family table chain rule", 100, nil, nil)
+	inputBox.AddButton("Add", func() {
+		pushAdd(inputBox.GetFormItem(0).(*cview.InputField).GetText()) 
+		addRule(myFlex, subFlex, addFlex)
+	})
+
+	addFlex.SetDirection(cview.FlexRow)
+	addFlex.AddItem(ruleList, 0, 8, false)
+	addFlex.AddItem(inputBox, 0, 1, false)
+
+	myFlex.SetDirection(cview.FlexColumn)
+    	myFlex.AddItem(subFlex, 0, 1, false)
+	myFlex.AddItem(addFlex, 0, 8, false)
+	
+	return
+}
+
+func pushAdd(ruleSet string) {
+	ruletemp := strings.Split(ruleSet, " ")
+	var newrule string
+	var rule []string
+	for i := 0; i < len(ruletemp); i++ {
+		if i < 3 {
+			rule = append(rule, ruletemp[i])
+		} else {
+			newrule += ruletemp[i]
+			if i != len(ruletemp)-1 {
+				newrule +=  " "
+			}
+		}
+	}
+	rule = append(rule, newrule)
+	cmd := exec.Command("nft", "add", "rule", rule[0], rule[1], rule[2], rule[3])
+	if err := cmd.Run(); err != nil {
+		return
+	}
+}
+
+func pushDelete(ruleSet string) {
+	rule := strings.Split(ruleSet, " ")
+	if len(rule) != 4 {
+		return
+	}
+	cmd := exec.Command("nft", "delete", "rule", rule[0], rule[1], rule[2], "handle", rule[3])
+	if err := cmd.Run(); err != nil {
+		return
+	}
 }
 
 func TextBox(title string) *cview.TextView {
