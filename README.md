@@ -42,29 +42,32 @@ Work to be done are listed below:
 For gathering information in real time and rendering it in the app, concurrency might be involved.
 Once this phase is solved, we can implement same idea for other items in the Todo list below.
 
+#### Main
+- [ ] Find a way to disable app.SetInputCapture() while typing in forms.
+
 #### SSH
-- [x] Find a way to display ssh logs on real time to the app
+- [x] Find a way to display ssh logs on real time to the app.
 
 #### Network & Processes
-- [x] Keep a track of network connections and display it on the app
+- [x] Keep a track of network connections and display it on the app.
 - [x] Gather suspicious processes and monitor their path in real time. `Halfway Done`
-- [ ] Detect Scanning and Monitor suspicious IP addresses and Processes
+- [ ] Detect Scanning and Monitor suspicious IP addresses and Processes.
 
 #### Filesystem
-- [x] Integrate output of `Fsnotify` golang library to the app for filesystem changes notifications
+- [x] Integrate output of `Fsnotify` golang library to the app for filesystem changes notifications.
 - [ ] Take file paths to monitor as user input from Form. Currently pressing `Shift 3` asks for path. Need to have a function to handle the input paths.
 
 #### Firewall
-- [x] Read Firewall configuration and display it on the app
-- [ ] Add concurrency to update firewall once it is displayed
-- [ ] Add, delete, and edit Firewall rules from within the app
-- [ ] Clear redundant functions from previous commits `Will be fixed after fully-working code is pushed`
+- [x] Read Firewall configuration and display it on the app.
+- [ ] Add concurrency to update firewall once it is displayed.
+- [ ] Add, delete, and edit Firewall rules from within the app.
+- [ ] Clear redundant functions from previous commits. `Will be fixed after fully-working code is pushed`
 
 #### Webserver
-- [ ] Read Web Server Logs and display it on the app
+- [ ] Read Web Server Logs and display it on the app.
 
 #### Services
-- [ ] List of Important Services and Their Status (Up / Down)
+- [ ] List of Important Services and Their Status (Up / Down).
 
 
 ## Resource
