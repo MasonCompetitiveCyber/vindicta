@@ -17,10 +17,16 @@ Install Vindicta
 git clone https://github.com/MasonCompetitiveCyber/vindicta.git
 cd vindicta
 ```
-Run Vindicta
+Run Vindicta (Without firewall tab)
 ```
 go mod tidy
 go run main.go
+```
+Run Vindicta (With Firewall tab)
+```
+go mod tidy
+go build .
+sudo ./vindicta
 ```
 
 # Demo
