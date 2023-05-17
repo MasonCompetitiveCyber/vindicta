@@ -30,7 +30,7 @@ sudo ./vindicta
 ```
 
 # Demo
-<img src="./Monitor.gif" alt="Monitoring Demo">
+<img src="./UpdatedDemo.gif" alt="Monitoring Demo">
 
 
 # Structure
