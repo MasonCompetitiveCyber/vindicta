@@ -19,6 +19,9 @@ func DisplaySocks(cviewApp *cview.Application) *cview.TextView {
 	view.SetBorderColor(tcell.ColorAquaMarine)
 	view.SetTextColor(tcell.ColorMaroon)
 	view.SetTextAlign(cview.AlignLeft)
+	view.SetTitle("Name                Pid                 Local                         Status              Remote                        Uid       Cwd")
+	view.SetTitleAlign(cview.AlignLeft)
+	view.SetTitleColor(tcell.ColorYellow)
 
 	// Start a goroutine to periodically update the view with listening sockets
 	go func() {
@@ -62,7 +65,7 @@ func DisplaySocks(cviewApp *cview.Application) *cview.TextView {
 					pid = "N/A"
 				}
 
-				result += fmt.Sprintf("%-20s%-20s%-20s%-20s%-10d%-30s\n", name, pid, v.LocalAddr, v.State, v.UID, cwd)
+				result += fmt.Sprintf("%-20s%-20s%-30s%-20s%-30s%-10d%-30s\n", name, pid, v.LocalAddr, v.State, v.RemoteAddr, v.UID, cwd)
 
 			}
 

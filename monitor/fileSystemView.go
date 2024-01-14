@@ -80,7 +80,7 @@ func CreateInput(panels *cview.TabbedPanels, app *cview.Application) func() {
 // File System Monitoring
 func FileSystemPanel(cviewApp *cview.Application) *cview.TextView {
 	view := cview.NewTextView()
-	view.SetTitle("Suspicious File System Activities")
+	view.SetTitle("File System Activities")
 	view.SetTitleColor(tcell.ColorGreen)
 	view.SetBorder(true)
 	view.SetBorderColor(tcell.ColorPurple)
