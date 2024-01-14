@@ -37,45 +37,42 @@ func main() {
 	file := monitor.FileSystemPanel(app)
 	// Network Connections and Process Monitoring Tab
 	netproc := monitor.DisplaySocks(app)
-	// Firewall Tab
-        fire := monitor.ConfigureFirewall(app)
-        services := monitor.ConfigureServices(app)
 
 	// Attach The Tabs Above To The Panels
 	panels.AddTab("ssh", "[1] SSH", ssh)
 	panels.AddTab("NetAndProc", "[2] Network and Processes", netproc)
 	panels.AddTab("filesystem", "[3] Filesystem", file)
-	panels.AddTab("firewall", "[4] Firewall", fire)
-	panels.AddTab("webserver", "[5] Webserver", cview.NewTextView())
-	panels.AddTab("services", "[6] Services", services)
-	panels.AddTab("kill", "[7] Kill Process", cview.NewTextView())
+	// panels.AddTab("firewall", "[4] Firewall", cview.NewTextView())
+	// panels.AddTab("webserver", "[5] Webserver", cview.NewTextView())
+	// panels.AddTab("services", "[6] Services", cview.NewTextView())
+	// panels.AddTab("kill", "[7] Kill Process", cview.NewTextView())
 
-    app.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
-        if event.Rune() == 113 {  // 113 means q
-            app.Stop()
-        } else if event.Rune() == 49 { // 49 means 1
-            panels.SetCurrentTab("ssh")
-        } else if event.Rune() == 50 { // 50 means 2
-            panels.SetCurrentTab("NetAndProc")
-        } else if event.Rune() == 51 {
-            panels.SetCurrentTab("filesystem")
-        } else if event.Rune() == 52 {
-            panels.SetCurrentTab("firewall")
-        } else if event.Rune() == 53 {
-            panels.SetCurrentTab("webserver")
-        } else if event.Rune() == 54 {
-            panels.SetCurrentTab("services")
-        } else if event.Rune() == 55 {
-            panels.SetCurrentTab("kill")
-        } else if event.Rune() == 35 {  // Uppercase # for editing
-            // Call the CreateInput function and get the callback function
-            inputCallback := monitor.CreateInput(panels, app)
-            // Call the callback function to display the form
-            inputCallback()
-        }
+	app.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
+		if event.Rune() == 113 { // 113 means q
+			app.Stop()
+		} else if event.Rune() == 49 { // 49 means 1
+			panels.SetCurrentTab("ssh")
+		} else if event.Rune() == 50 { // 50 means 2
+			panels.SetCurrentTab("NetAndProc")
+		} else if event.Rune() == 51 {
+			panels.SetCurrentTab("filesystem")
+			// } else if event.Rune() == 52 {
+			// 	panels.SetCurrentTab("firewall")
+			// } else if event.Rune() == 53 {
+			// 	panels.SetCurrentTab("webserver")
+			// } else if event.Rune() == 54 {
+			// 	panels.SetCurrentTab("services")
+			// } else if event.Rune() == 55 {
+			// 	panels.SetCurrentTab("kill")
+		} else if event.Rune() == 35 { // Uppercase # for editing
+			// Call the CreateInput function and get the callback function
+			inputCallback := monitor.CreateInput(panels, app)
+			// Call the callback function to display the form
+			inputCallback()
+		}
 
-        return event
-    })
+		return event
+	})
 
 	// Set Panels as Root
 	app.SetRoot(panels, true)
@@ -85,4 +82,3 @@ func main() {
 	}
 
 }
-
