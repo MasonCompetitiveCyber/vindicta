@@ -2,10 +2,11 @@ package monitor
 
 import (
 	"fmt"
-	"github.com/sbinet/pstree"
 	"log"
 	"os"
 	"time"
+
+	"github.com/sbinet/pstree"
 
 	"code.rocketnine.space/tslocum/cview"
 	"github.com/cakturk/go-netstat/netstat"
@@ -15,6 +16,27 @@ import (
 // Track the previous Cwd and time for each PID
 var prevCwdMap = make(map[int]string)
 var prevTimeMap = make(map[int]time.Time)
+
+// recursive function to trace child PID
+func getChildProcess(result *string, tree *pstree.Tree, childPid []int, v *netstat.SockTabEntry) {
+
+	if len(childPid) == 0 {
+		return
+	}
+
+	for _, children := range childPid {
+		if _, err := os.Stat(tree.Procs[children].Stat.Cwd); err == nil {
+			childPid := fmt.Sprintf("%d", children)
+			childName := tree.Procs[children].Name
+			childPwd := tree.Procs[children].Stat.Cwd
+
+			*result += fmt.Sprintf("[black:blue]%-20s%-20s%-30s%-20s%-30s%-10d%-30s\n", childName, childPid, v.LocalAddr, v.State, v.RemoteAddr, v.UID, childPwd)
+
+		}
+		getChildProcess(result, tree, tree.Procs[children].Children, v)
+	}
+
+}
 
 // Display established network connections and process information related to it
 func DisplaySocks(cviewApp *cview.Application) *cview.TextView {
@@ -49,15 +71,21 @@ func DisplaySocks(cviewApp *cview.Application) *cview.TextView {
 				var pidInt int
 				var cwd string
 
+				var tree *pstree.Tree
+
+				var childrens []int
+
 				if v.Process != nil {
 					pid = fmt.Sprintf("%d", v.Process.Pid)
-					name = fmt.Sprintf("%s", v.Process.Name)
+					name = v.Process.Name
 					pidInt = v.Process.Pid
 
-					tree, err := pstree.New()
+					tree, err = pstree.New()
 					if err != nil {
 						continue
 					}
+
+					childrens = tree.Procs[pidInt].Children
 
 					// Check if the Cwd path exists before accessing it
 					if _, err := os.Stat(tree.Procs[pidInt].Stat.Cwd); err == nil {
@@ -83,6 +111,9 @@ func DisplaySocks(cviewApp *cview.Application) *cview.TextView {
 				}
 
 				result += fmt.Sprintf("[black:blue]%-20s%-20s%-30s%-20s%-30s%-10d%-30s\n", name, pid, v.LocalAddr, v.State, v.RemoteAddr, v.UID, cwd)
+				if len(childrens) != 0 {
+					getChildProcess(&result, tree, childrens, &v)
+				}
 
 			}
 
