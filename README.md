@@ -2,15 +2,19 @@
 Blue Team Monitoring Tool For Linux that runs within a Terminal
 
 # Install and Run
-Install golang
-https://go.dev/doc/install
+Download binary directly from releases and run it.
 
-Install Vindicta 
+# Build and Run
+- Install Golang
+```
+https://go.dev/doc/install
+```
+- Install Vindicta 
 ```
 git clone https://github.com/MasonCompetitiveCyber/vindicta.git
 cd vindicta
 ```
-Run Vindicta
+- Build and Run Vindicta
 ```
 go mod tidy
 go build .
