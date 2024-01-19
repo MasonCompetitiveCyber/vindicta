@@ -80,13 +80,12 @@ func CreateInput(panels *cview.TabbedPanels, app *cview.Application) func() {
 // File System Monitoring
 func FileSystemPanel(cviewApp *cview.Application) *cview.TextView {
 	view := cview.NewTextView()
-	view.SetTitle("File System Activities")
-	view.SetTitleColor(tcell.ColorGreen)
+	view.SetDynamicColors(true)
+	view.SetTitle("[black:green:blr]File System Activities")
 	view.SetBorder(true)
 	view.SetBorderColor(tcell.ColorPurple)
 	view.SetTextAlign(cview.AlignLeft)
 	view.SetPadding(2, 2, 2, 2)
-	view.SetTextColor(tcell.ColorRed)
 
 	watcher, err = fsnotify.NewWatcher()
 
@@ -118,17 +117,17 @@ func FileSystemPanel(cviewApp *cview.Application) *cview.TextView {
 
 				// Prepare the string to display in the view
 				if perms != "Deleted" {
-					result = fmt.Sprintf("%s: %s %s", time.Now().Format("2006-01-02 15:04:05"), perms, event.String())
+					result = fmt.Sprintf("[black:violet:br]%s: %s %s", time.Now().Format("2006-01-02 15:04:05"), perms, event.String())
 				} else {
-					result = fmt.Sprintf("%s: %-10s %s", time.Now().Format("2006-01-02 15:04:05"), "", event.String())
+					result = fmt.Sprintf("[black:violet:br]%s: %-10s %s", time.Now().Format("2006-01-02 15:04:05"), "", event.String())
 				}
 
 				// Add the new event to the beginning of the events slice
 				events = append([]string{result}, events...)
 
 				// Limit the number of events to 50
-				if len(events) > 50 {
-					events = events[:50]
+				if len(events) > 200 {
+					events = events[:200]
 				}
 
 				// Concatenate all events into a single string

@@ -69,7 +69,7 @@ func DisplaySocks(cviewApp *cview.Application) *cview.TextView {
 	view.SetBorderColor(tcell.ColorOrange)
 	view.SetTextColor(tcell.ColorMaroon)
 	view.SetTextAlign(cview.AlignLeft)
-	view.SetTitle("[black:red]Name                Pid                 Local                         Status              Remote                        Uid       Cwd                           ")
+	view.SetTitle("[black:violet:br]Name                Pid                 Local                         Status              Remote                        Uid       Cwd                           ")
 	view.SetTitleAlign(cview.AlignLeft)
 	view.SetTitleColor(tcell.ColorYellow)
 	view.SetDynamicColors(true)
@@ -89,12 +89,13 @@ func DisplaySocks(cviewApp *cview.Application) *cview.TextView {
 			for _, v := range tabs {
 
 				//process Information
-				var pidInt int = v.Process.Pid
+				var pidInt int
 				var tree *pstree.Tree
 				var childrens []int
 
 				if v.Process != nil {
 
+					pidInt = v.Process.Pid
 					tree, err = pstree.New()
 					if err != nil {
 						continue
