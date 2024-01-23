@@ -76,13 +76,25 @@ func DisplaySocks(cviewApp *cview.Application) *cview.TextView {
 
 	go func() {
 		for {
-			tabs, err := netstat.TCPSocks(func(s *netstat.SockTabEntry) bool {
+
+			// TCP Established Connections
+			tcpTabs, err := netstat.TCPSocks(func(s *netstat.SockTabEntry) bool {
 				return s.State == netstat.Established
 			})
-
 			if err != nil {
 				log.Fatal(err)
 			}
+
+			// UDP Established Connections
+			udpTabs, err := netstat.UDPSocks(func(s *netstat.SockTabEntry) bool {
+				return s.State == netstat.Established
+			})
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			// All Established Connections
+			tabs := append(tcpTabs, udpTabs...)
 
 			var result string
 

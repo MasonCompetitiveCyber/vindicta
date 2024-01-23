@@ -81,7 +81,7 @@ func CreateInput(panels *cview.TabbedPanels, app *cview.Application) func() {
 func FileSystemPanel(cviewApp *cview.Application) *cview.TextView {
 	view := cview.NewTextView()
 	view.SetDynamicColors(true)
-	view.SetTitle("[black:green:blr]File System Activities")
+	view.SetTitle("[black:violet:blr]File System Activities")
 	view.SetBorder(true)
 	view.SetBorderColor(tcell.ColorPurple)
 	view.SetTextAlign(cview.AlignLeft)
@@ -117,9 +117,9 @@ func FileSystemPanel(cviewApp *cview.Application) *cview.TextView {
 
 				// Prepare the string to display in the view
 				if perms != "Deleted" {
-					result = fmt.Sprintf("[black:violet:br]%s: %s %s", time.Now().Format("2006-01-02 15:04:05"), perms, event.String())
+					result = fmt.Sprintf("[black:green:br]%s: %s %s", time.Now().Format("2006-01-02 15:04:05"), perms, event.String())
 				} else {
-					result = fmt.Sprintf("[black:violet:br]%s: %-10s %s", time.Now().Format("2006-01-02 15:04:05"), "", event.String())
+					result = fmt.Sprintf("[black:red:brl]%s: %-10s %s", time.Now().Format("2006-01-02 15:04:05"), "", event.String())
 				}
 
 				// Add the new event to the beginning of the events slice

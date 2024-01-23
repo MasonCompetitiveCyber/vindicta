@@ -7,6 +7,7 @@ require (
 	github.com/cakturk/go-netstat v0.0.0-20200220111822-e5b49efee7a5
 	github.com/fsnotify/fsnotify v1.6.0
 	github.com/gdamore/tcell/v2 v2.5.2
+	github.com/google/gopacket v1.1.19
 	github.com/sbinet/pstree v0.5.1
 )
 
