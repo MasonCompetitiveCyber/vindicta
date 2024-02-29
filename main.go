@@ -9,6 +9,7 @@ import (
 func main() {
 	// Define the Application
 	app := cview.NewApplication()
+	defer app.HandlePanic()
 
 	// Enable Using Mouse
 	app.EnableMouse(true)
@@ -21,7 +22,6 @@ func main() {
 	panels.SetBorderColor(tcell.ColorYellow)
 	panels.SetTitle("Vindicta")
 	panels.SetTitleColor(tcell.ColorBlue)
-	panels.SetTabTextColor(tcell.ColorPurple)
 	panels.SetBorderAttributes(tcell.AttrBold)
 	panels.SetTabBackgroundColor(tcell.ColorBlueViolet)
 	panels.SetTabTextColor(tcell.ColorWhite)
@@ -37,15 +37,17 @@ func main() {
 	file := monitor.FileSystemPanel(app)
 	// Network Connections and Process Monitoring Tab
 	netproc := monitor.DisplaySocks(app)
+	// Packet Monitoring Tab
+	pkt := monitor.PacketMonitor(app)
+	// Web Logs
+	web := monitor.MonitorWebLogs(app)
 
 	// Attach The Tabs Above To The Panels
 	panels.AddTab("ssh", "[1] SSH", ssh)
 	panels.AddTab("NetAndProc", "[2] Network and Processes", netproc)
 	panels.AddTab("filesystem", "[3] Filesystem", file)
-	// panels.AddTab("firewall", "[4] Firewall", cview.NewTextView())
-	// panels.AddTab("webserver", "[5] Webserver", cview.NewTextView())
-	// panels.AddTab("services", "[6] Services", cview.NewTextView())
-	// panels.AddTab("kill", "[7] Kill Process", cview.NewTextView())
+	panels.AddTab("packet", "[4] Packet Monitoring", pkt)
+	panels.AddTab("web", "[5] Web", web)
 
 	app.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		if event.Rune() == 113 { // 113 means q
@@ -56,14 +58,10 @@ func main() {
 			panels.SetCurrentTab("NetAndProc")
 		} else if event.Rune() == 51 {
 			panels.SetCurrentTab("filesystem")
-			// } else if event.Rune() == 52 {
-			// 	panels.SetCurrentTab("firewall")
-			// } else if event.Rune() == 53 {
-			// 	panels.SetCurrentTab("webserver")
-			// } else if event.Rune() == 54 {
-			// 	panels.SetCurrentTab("services")
-			// } else if event.Rune() == 55 {
-			// 	panels.SetCurrentTab("kill")
+		} else if event.Rune() == 52 {
+			panels.SetCurrentTab("packet")
+		} else if event.Rune() == 53 {
+			panels.SetCurrentTab("web")
 		} else if event.Rune() == 35 { // Uppercase # for editing
 			// Call the CreateInput function and get the callback function
 			inputCallback := monitor.CreateInput(panels, app)
