@@ -39,12 +39,15 @@ func main() {
 	netproc := monitor.DisplaySocks(app)
 	// Packet Monitoring Tab
 	pkt := monitor.PacketMonitor(app)
+	// Web Logs
+	web := monitor.MonitorWebLogs(app)
 
 	// Attach The Tabs Above To The Panels
 	panels.AddTab("ssh", "[1] SSH", ssh)
 	panels.AddTab("NetAndProc", "[2] Network and Processes", netproc)
 	panels.AddTab("filesystem", "[3] Filesystem", file)
 	panels.AddTab("packet", "[4] Packet Monitoring", pkt)
+	panels.AddTab("web", "[5] Web", web)
 
 	app.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		if event.Rune() == 113 { // 113 means q
@@ -57,6 +60,8 @@ func main() {
 			panels.SetCurrentTab("filesystem")
 		} else if event.Rune() == 52 {
 			panels.SetCurrentTab("packet")
+		} else if event.Rune() == 53 {
+			panels.SetCurrentTab("web")
 		} else if event.Rune() == 35 { // Uppercase # for editing
 			// Call the CreateInput function and get the callback function
 			inputCallback := monitor.CreateInput(panels, app)
